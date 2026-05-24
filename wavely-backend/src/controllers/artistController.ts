@@ -5,7 +5,8 @@ export const getAllArtists = async (req: Request, res: Response) => {
   try {
     const [rows] = await pool.query('SELECT * FROM artists');
     res.json(rows);
-  } catch {
-    res.status(500).json({ message: 'Server error' });
-  }
+  } catch (err) {
+  console.error(err);
+  res.status(500).json({ message: 'Server error' });
+}
 };
