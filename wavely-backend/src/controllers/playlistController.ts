@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { pool } from '../db/db';
 import { AuthRequest } from '../middleware/authMiddleware';
+import { createAuditLog } from '../services/auditService';
 
 export const getPlaylists = async (
   req: AuthRequest,
@@ -56,6 +57,11 @@ export const createPlaylist = async (
       ]
     );
 
+    await createAuditLog(
+  req.user!.id,
+  'Created playlist'
+);
+
     res.json({
       message: 'Playlist created'
     });
@@ -86,6 +92,11 @@ export const deletePlaylist = async (
       `,
       [playlistId, req.user!.id]
     );
+
+await createAuditLog(
+  req.user!.id,
+  'Deleted playlist'
+);
 
     res.json({
       message: 'Playlist deleted'
@@ -162,6 +173,11 @@ export const addTrackToPlaylist = async (
       [playlistId, trackId, position]
     );
 
+await createAuditLog(
+  req.user!.id,
+  `Added track ${trackId} to playlist ${playlistId}`
+);
+
     res.json({
       message: 'Track added to playlist'
     });
@@ -227,6 +243,11 @@ export const removeTrackFromPlaylist = async (
       `,
       [playlistId, trackId]
     );
+
+await createAuditLog(
+  req.user!.id,
+  `Removed track ${trackId} from playlist ${playlistId}`
+);
 
     res.json({
       message: 'Track removed from playlist'
