@@ -30,11 +30,14 @@ export const authMiddleware = (
       token,
       process.env.JWT_SECRET as string
     ) as unknown as {
-      id: number;
+      user_id: number;
       role: string;
     };
 
-    req.user = decoded;
+    req.user = {
+  id: decoded.user_id,
+  role: decoded.role
+};
 
     next();
 

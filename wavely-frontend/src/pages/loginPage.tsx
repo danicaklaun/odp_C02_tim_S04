@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import api from '../services/api';
 
+import bgImage from '../assets/bg.jpeg';
+
 function LoginPage() {
 
   const [email, setEmail] = useState('');
@@ -31,37 +33,87 @@ function LoginPage() {
   };
 
   return (
-    <div>
 
-      <h1>Login</h1>
+    <div
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) =>
-          setEmail(e.target.value)
-        }
-      />
+      <div
+        style={{
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          padding: '40px',
+          borderRadius: '20px',
+          width: '350px',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px'
+        }}
+      >
 
-      <br />
-      <br />
+        <h1
+          style={{
+            color: 'white',
+            textAlign: 'center',
+            fontSize: '40px',
+            fontWeight: 'bold'
+          }}
+        >
+          Wavely
+        </h1>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) =>
-          setPassword(e.target.value)
-        }
-      />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+          style={{
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none'
+          }}
+        />
 
-      <br />
-      <br />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
+          style={{
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none'
+          }}
+        />
 
-      <button onClick={handleLogin}>
-        Login
-      </button>
+        <button
+          onClick={handleLogin}
+          style={{
+            padding: '12px',
+            borderRadius: '10px',
+            border: 'none',
+            backgroundColor: '#7c3aed',
+            color: 'white',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}
+        >
+          Login
+        </button>
+
+      </div>
 
     </div>
   );
