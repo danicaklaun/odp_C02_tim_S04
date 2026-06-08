@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-
 import bgImage from '../assets/bg.jpeg';
 
 function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
 
@@ -20,51 +22,46 @@ function LoginPage() {
         }
       );
 
-      console.log(response.data);
+      localStorage.setItem(
+        'token',
+        response.data.token
+      );
 
-      alert('Login successful');
+      navigate('/home');
 
-    } catch (error) {
+    } catch {
 
-      console.log(error);
+      alert('Invalid email or password');
 
-      alert('Login failed');
     }
   };
 
   return (
-
     <div
       style={{
+        minHeight: '100vh',
         backgroundImage: `url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
       }}
     >
-
       <div
         style={{
-          backgroundColor: 'rgba(0,0,0,0.7)',
+          background: 'rgba(0,0,0,0.75)',
           padding: '40px',
           borderRadius: '20px',
           width: '350px',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '15px'
+          textAlign: 'center',
+          color: 'white'
         }}
       >
-
         <h1
           style={{
-            color: 'white',
-            textAlign: 'center',
-            fontSize: '40px',
-            fontWeight: 'bold'
+            marginBottom: '25px',
+            fontSize: '40px'
           }}
         >
           Wavely
@@ -74,11 +71,11 @@ function LoginPage() {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
           style={{
+            width: '100%',
             padding: '12px',
+            marginBottom: '15px',
             borderRadius: '10px',
             border: 'none'
           }}
@@ -88,11 +85,11 @@ function LoginPage() {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
           style={{
+            width: '100%',
             padding: '12px',
+            marginBottom: '20px',
             borderRadius: '10px',
             border: 'none'
           }}
@@ -101,20 +98,19 @@ function LoginPage() {
         <button
           onClick={handleLogin}
           style={{
+            width: '100%',
             padding: '12px',
-            borderRadius: '10px',
-            border: 'none',
-            backgroundColor: '#7c3aed',
+            background: '#6366f1',
             color: 'white',
-            fontWeight: 'bold',
-            cursor: 'pointer'
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            fontSize: '16px'
           }}
         >
           Login
         </button>
-
       </div>
-
     </div>
   );
 }
