@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import bg2 from '../assets/bg2.webp';
 
 function HomePage() {
 
@@ -6,69 +7,84 @@ function HomePage() {
 
   return (
     <div
+  style={{
+    minHeight:'100vh',
+    padding:'50px',
+
+    backgroundImage: `
+      linear-gradient(
+        rgba(5,10,30,.55),
+        rgba(5,10,30,.55)
+      ),
+      url(${bg2})
+    `,
+
+    backgroundSize:'cover',
+    backgroundPosition:'center',
+    backgroundRepeat:'no-repeat'
+    
+  }}
+>
+  <div
+    className="y2k-card"
       style={{
+        
         minHeight: '100vh',
-        background: '#111827',
         color: 'white',
         padding: '40px'
       }}
     >
-      <h1
-        style={{
-          fontSize: '48px',
-          marginBottom: '10px'
-        }}
-      >
-        Wavely
+      <h1 className="page-title"  style={{
+    fontFamily: 'AudioNugget',
+    fontSize: '110px',
+    lineHeight: '1',
+    color: '#f472d0',
+    marginBottom: '20px',
+    textShadow: '0 0 20px rgba(244,114,208,0.5)'
+  }}>
+        ✨ Wavely ✨
       </h1>
 
-      <p
-        style={{
-          color: '#9ca3af',
-          marginBottom: '40px'
-        }}
-      >
+      <p className="page-subtitle">
         Welcome back
       </p>
 
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 250px)',
-          gap: '20px'
+          display:'grid',
+          gridTemplateColumns:'repeat(2,320px)',
+          gap:'30px'
         }}
       >
+
         <div
+          className="y2k-card"
           onClick={() => navigate('/playlists')}
           style={{
-            background: '#1f2937',
-            padding: '30px',
-            borderRadius: '20px',
-            cursor: 'pointer'
+            padding:'35px',
+            borderRadius:'25px'
           }}
         >
           🎵 My Playlists
         </div>
 
         <div
+          className="y2k-card"
           onClick={() => navigate('/library')}
           style={{
-            background: '#1f2937',
-            padding: '30px',
-            borderRadius: '20px',
-            cursor: 'pointer'
+            padding:'35px',
+            borderRadius:'25px'
           }}
         >
-          📚 My Library
+          💿 My Library
         </div>
 
         <div
+          className="y2k-card"
           onClick={() => navigate('/following')}
           style={{
-            background: '#1f2937',
-            padding: '30px',
-            borderRadius: '20px',
-            cursor: 'pointer'
+            padding:'35px',
+            borderRadius:'25px'
           }}
         >
           🎤 Following Artists
@@ -80,15 +96,18 @@ function HomePage() {
             navigate('/');
           }}
           style={{
-            background: '#dc2626',
-            padding: '30px',
-            borderRadius: '20px',
-            cursor: 'pointer'
+            background:'#ff2d55',
+            padding:'35px',
+            borderRadius:'25px',
+            cursor:'pointer',
+            boxShadow:'0 0 25px rgba(255,45,85,.5)'
           }}
         >
           🚪 Logout
         </div>
+
       </div>
+    </div>
     </div>
   );
 }

@@ -1,6 +1,81 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Outfit',sans-serif;
+}
+
+@font-face {
+  font-family: 'AudioNugget';
+  src: url('./assets/fonts/AudioNugget.ttf');
+}
+
+.logo {
+  font-family: 'AudioNugget';
+}
+
+body{
+  min-height:100vh;
+
+  background:
+  linear-gradient(
+    rgba(5,10,30,.75),
+    rgba(5,10,30,.75)
+  ),
+  url('./assets/bg.jpg');
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+
+  color:white;
+}
+
+button{
+  cursor:pointer;
+  border:none;
+}
+
+.y2k-card{
+  background:rgba(255,255,255,.08);
+
+  backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,.15);
+
+  box-shadow:
+  0 0 20px rgba(255,79,216,.25);
+
+  transition:.3s;
+}
+
+.y2k-card:hover{
+  transform:translateY(-5px);
+
+  box-shadow:
+  0 0 35px rgba(255,79,216,.55);
+}
+
+.page-title{
+  font-size:64px;
+  font-weight:800;
+
+  background:
+  linear-gradient(
+    90deg,
+    #ff4fd8,
+    #ffffff,
+    #7dd3fc
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.page-subtitle{
+  color:#d1d5db;
+  margin-top:10px;
+  margin-bottom:40px;
 }

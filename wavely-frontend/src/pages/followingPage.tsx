@@ -1,45 +1,24 @@
-import { useEffect, useState } from 'react';
-import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import bg3 from '../assets/bg3.webp';
 
 
-function LibraryPage() {
+function FollowingPage() {
 
-  const [tracks, setTracks] = useState<any[]>([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-
-    const getLibrary = async () => {
-
-      try {
-
-        const token = localStorage.getItem('token');
-
-        const response = await api.get(
-          '/library',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        console.log('TOKEN', localStorage.getItem('token'));
-console.log('DATA', response.data);
-        setTracks(response.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-
-    getLibrary();
-
-  }, []);
+    const navigate = useNavigate();
+  const artists = [
+    {
+      id: 1,
+      name: 'The Weeknd'
+    },
+    {
+      id: 2,
+      name: 'Arctic Monkeys'
+    },
+    {
+      id: 3,
+      name: 'Imagine Dragons'
+    }
+  ];
 
   return (
      <div
@@ -61,6 +40,7 @@ console.log('DATA', response.data);
     
   }}
 >
+
     <div
     className="y2k-card"
       style={{
@@ -81,29 +61,30 @@ console.log('DATA', response.data);
 >
   🏠 Home
 </button>
+
      <h1
   style={{
     fontFamily: 'AudioNugget',
     fontSize: '90px',
     color: '#f472d0',
-    marginBottom: '10px'
+    marginBottom: '30px'
   }}
 >
-  💿 My Library
+  🎤 Following Artists
 </h1>
-<p>Broj pesama: {tracks.length}</p>
-      {tracks.map((track) => (
+
+      {artists.map((artist) => (
 
         <div
         className="y2k-card"
-          key={track.id}
+          key={artist.id}
           style={{
             padding: '20px',
             borderRadius: '15px',
             marginTop: '15px'
           }}
         >
-          {track.title}
+          {artist.name}
         </div>
 
       ))}
@@ -112,4 +93,4 @@ console.log('DATA', response.data);
   );
 }
 
-export default LibraryPage;
+export default FollowingPage;
