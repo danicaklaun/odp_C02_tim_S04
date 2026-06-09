@@ -9,11 +9,20 @@ export const getAllUsers = async (
 
     const [rows] = await pool.execute(`
       SELECT
-        id,
-        username,
-        email,
-        role
+        users.id,
+        users.username,
+        users.email,
+        users.role,
+        COUNT(user_tracks.track_id) AS saved_tracks
       FROM users
+      LEFT JOIN user_tracks
+      ON user_tracks.user_id = users.id
+      GROUP BY
+        users.id,
+        users.username,
+        users.email,
+        users.role
+      ORDER BY users.id
     `);
 
     res.json(rows);

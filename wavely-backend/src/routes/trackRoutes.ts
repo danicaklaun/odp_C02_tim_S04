@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getTracks,
+  getTrackDetails,
   createTrack,
   deleteTrack
 } from '../controllers/trackController';
@@ -26,6 +27,11 @@ router.delete(
   authMiddleware,
   authorizeRole('admin'),
   deleteTrack
+);
+
+router.get(
+  '/:id',
+  getTrackDetails
 );
 
 export default router;

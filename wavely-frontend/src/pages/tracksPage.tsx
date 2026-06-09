@@ -222,24 +222,30 @@ const deleteTrack = async (
 )}
         {tracks.map((track) => (
 
-          <div
-            key={track.id}
-            className="y2k-card"
-            style={{
-              padding:'20px',
-              marginTop:'15px',
-              display:'flex',
-              justifyContent:'space-between',
-              alignItems:'center'
-            }}
-          >
+         <div
+  key={track.id}
+  className="y2k-card"
+  onClick={() =>
+    navigate(`/tracks/${track.id}`)
+  }
+  style={{
+    padding:'20px',
+    marginTop:'15px',
+    display:'flex',
+    justifyContent:'space-between',
+    alignItems:'center',
+    cursor:'pointer'
+  }}
+>
             <span>{track.title}</span>
 
 <div>
 
             <button
-              onClick={() => saveTrack(track.id)}
-              style={{
+onClick={(e) => {
+  e.stopPropagation();
+  saveTrack(track.id);
+}}              style={{
                 background:'#f472d0',
                 border:'none',
                 color:'white',
@@ -253,9 +259,10 @@ const deleteTrack = async (
 {role === 'admin' && (
 
   <button
-    onClick={() =>
-      deleteTrack(track.id)
-    }
+   onClick={(e) => {
+  e.stopPropagation();
+  deleteTrack(track.id);
+}}
     style={{
       marginLeft:'10px',
       background:'#ff2d55',

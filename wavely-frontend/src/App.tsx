@@ -16,6 +16,7 @@ import AdminPage from './pages/adminPage';
 import AuditLogsPage from './pages/auditLogsPage';
 import UsersPage from './pages/usersPage';
 import ArtistDetailsPage from './pages/artistDetailsPage';
+import TrackDetailsPage from './pages/trackDetailsPage';
 
 function App() {
   return (
@@ -72,6 +73,10 @@ function App() {
 <Route
   path="/artists/:id"
   element={<ArtistDetailsPage />}
+/>
+<Route
+  path="/tracks/:id"
+  element={<TrackDetailsPage />}
 />
     </Routes>
   );

@@ -6,30 +6,72 @@ import bg3 from '../assets/bg3.webp';
 function ArtistsPage() {
 
   const [artists, setArtists] = useState<any[]>([]);
+
   const navigate = useNavigate();
 
+  const role = localStorage.getItem('role');
+
+  const getArtists = async () => {
+
+    try {
+
+      const response =
+        await api.get('/artists');
+
+      setArtists(response.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
   useEffect(() => {
-
-    const getArtists = async () => {
-
-      try {
-
-        const response = await api.get('/artists');
-                console.log(response.data);
-
-
-        setArtists(response.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-
     getArtists();
-
   }, []);
+
+  const editArtist = async (
+    artist: any
+  ) => {
+
+    try {
+
+      const newName =
+        prompt(
+          'New name:',
+          artist.name
+        );
+
+      if (!newName) return;
+
+      const token =
+        localStorage.getItem('token');
+
+      await api.put(
+        `/artists/${artist.id}`,
+        {
+          name: newName,
+          genre: artist.genre,
+          country: artist.country,
+          bio: artist.bio
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+      );
+
+      getArtists();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
 
   return (
     <div
@@ -88,20 +130,40 @@ function ArtistsPage() {
 
         {artists.map((artist) => (
 
-         <div
-  key={artist.id}
-  className="y2k-card"
-  onClick={() =>
-    navigate(`/artists/${artist.id}`)
-  }
-  style={{
-    cursor:'pointer',
-    padding:'20px',
-    borderRadius:'15px',
-    marginTop:'15px'
-  }}
->
+          <div
+            key={artist.id}
+            className="y2k-card"
+            onClick={() =>
+              navigate(`/artists/${artist.id}`)
+            }
+            style={{
+              cursor:'pointer',
+              padding:'20px',
+              borderRadius:'15px',
+              marginTop:'15px'
+            }}
+          >
             <h3>{artist.name}</h3>
+
+            {role === 'admin' && (
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  editArtist(artist);
+                }}
+                style={{
+                  marginBottom:'10px',
+                  padding:'8px 12px',
+                  borderRadius:'8px',
+                  border:'none',
+                  cursor:'pointer'
+                }}
+              >
+                ✏ Edit
+              </button>
+
+            )}
 
             {artist.genre && (
               <p>
@@ -114,6 +176,7 @@ function ArtistsPage() {
                 Country: {artist.country}
               </p>
             )}
+
           </div>
 
         ))}

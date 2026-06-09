@@ -113,6 +113,9 @@ function UsersPage() {
           <p>
             Role: {user.role}
           </p>
+          <p>
+  Saved tracks: {user.saved_tracks}
+</p>
 
           <button
             onClick={() =>
@@ -125,8 +128,11 @@ function UsersPage() {
             Change Role
           </button>
         </div>
+        
 
-      ))}
+      ))
+      }
+      
     </div>
   );
 }

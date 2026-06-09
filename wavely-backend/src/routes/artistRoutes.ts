@@ -3,7 +3,9 @@ import {
   getAllArtists,
   createArtist,
   getArtistDetails,
-  deleteArtist
+  deleteArtist,
+  updateArtist,
+  updateTrack
 } from '../controllers/artistController';import { authMiddleware } from '../middleware/authMiddleware';
 import { authorizeRole } from '../middleware/authorizeRole';
 
@@ -32,3 +34,16 @@ router.get(
   getArtistDetails
 );
 export default router;
+
+router.put(
+  '/:id',
+  authMiddleware,
+  authorizeRole('admin'),
+  updateArtist
+);
+router.put(
+  '/:id',
+  authMiddleware,
+  authorizeRole('admin'),
+  updateTrack
+);

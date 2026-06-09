@@ -29,6 +29,47 @@ export const getTracks = async (
   }
 };
 
+export const getTrackDetails = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+
+    const trackId = Number(req.params.id);
+
+    const [rows]: any = await pool.execute(
+      `
+      SELECT
+        tracks.*,
+        artists.name AS artist_name,
+        artists.genre
+      FROM tracks
+      JOIN artists
+      ON artists.id = tracks.artist_id
+      WHERE tracks.id = ?
+      `,
+      [trackId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: 'Track not found'
+      });
+    }
+
+    res.json(rows[0]);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
+};
+
 export const createTrack = async (
   req: AuthRequest,
   res: Response

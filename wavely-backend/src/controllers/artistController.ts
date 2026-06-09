@@ -68,6 +68,60 @@ export const createArtist = async (
   }
 };
 
+export const updateArtist = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+
+    const artistId = Number(req.params.id);
+
+    const {
+      name,
+      genre,
+      country,
+      bio
+    } = req.body;
+
+    await pool.execute(
+      `
+      UPDATE artists
+      SET
+        name = ?,
+        genre = ?,
+        country = ?,
+        bio = ?
+      WHERE id = ?
+      `,
+      [
+        name,
+        genre,
+        country,
+        bio,
+        artistId
+      ]
+    );
+
+    await createAuditLog(
+      req.user!.id,
+      `Updated artist ${name}`
+    );
+
+    res.json({
+      message: 'Artist updated'
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
+};
+
 export const deleteArtist = async (
   req: AuthRequest,
   res: Response
@@ -147,9 +201,76 @@ export const getArtistDetails = async (
       [artistId]
     );
 
+    const [followerRows]: any = await pool.execute(
+  `
+  SELECT COUNT(*) AS followers
+  FROM user_artists
+  WHERE artist_id = ?
+  `,
+  [artistId]
+);
+
+res.json({
+  artist: artistRows[0],
+  tracks: trackRows,
+  followers: followerRows[0].followers
+});
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
+};
+
+export const updateTrack = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+
+    const trackId = Number(req.params.id);
+
+    const {
+      title,
+      artist_id,
+      duration_sec,
+      album,
+      release_year
+    } = req.body;
+
+    await pool.execute(
+      `
+      UPDATE tracks
+      SET
+        title = ?,
+        artist_id = ?,
+        duration_sec = ?,
+        album = ?,
+        release_year = ?
+      WHERE id = ?
+      `,
+      [
+        title,
+        artist_id,
+        duration_sec,
+        album,
+        release_year,
+        trackId
+      ]
+    );
+
+    await createAuditLog(
+      req.user!.id,
+      `Updated track ${title}`
+    );
+
     res.json({
-      artist: artistRows[0],
-      tracks: trackRows
+      message: 'Track updated'
     });
 
   } catch (error) {

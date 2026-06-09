@@ -3,29 +3,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 import bg3 from '../assets/bg3.webp';
 
-function ArtistDetailsPage() {
+function TrackDetailsPage() {
 
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const [followers, setFollowers] = useState(0);
 
-  const [artist, setArtist] = useState<any>(null);
-  const [tracks, setTracks] = useState<any[]>([]);
+  const [track, setTrack] = useState<any>(null);
 
   useEffect(() => {
 
-    const getArtist = async () => {
+    const getTrack = async () => {
 
       try {
 
         const response = await api.get(
-          `/artists/${id}`
+          `/tracks/${id}`
         );
 
-        setArtist(response.data.artist);
-setTracks(response.data.tracks);
-setFollowers(response.data.followers);
+        setTrack(response.data);
 
       } catch (error) {
 
@@ -34,13 +30,20 @@ setFollowers(response.data.followers);
       }
     };
 
-    getArtist();
+    getTrack();
 
   }, [id]);
 
-  if (!artist) {
+  if (!track) {
     return <div>Loading...</div>;
   }
+
+  const minutes =
+    Math.floor(track.duration_sec / 60);
+
+  const seconds =
+    String(track.duration_sec % 60)
+      .padStart(2, '0');
 
   return (
     <div
@@ -67,7 +70,7 @@ setFollowers(response.data.followers);
       >
 
         <button
-          onClick={() => navigate('/artists')}
+          onClick={() => navigate('/tracks')}
         >
           ⬅ Back
         </button>
@@ -79,60 +82,26 @@ setFollowers(response.data.followers);
             color:'#f472d0'
           }}
         >
-          🎤 {artist.name}
+          🎵 {track.title}
         </h1>
-        <h1
-  style={{
-    fontFamily:'AudioNugget',
-    fontSize:'90px',
-    color:'#f472d0'
-  }}
->
-  🎤 {artist.name}
-</h1>
 
-<p>
-  👥 Followers: {followers}
-</p>
+        <p>Artist: {track.artist_name}</p>
 
-<p>
-  Genre: {artist.genre}
-</p>
+        <p>Genre: {track.genre}</p>
+
+        <p>Album: {track.album}</p>
 
         <p>
-          Genre: {artist.genre}
+          Duration: {minutes}:{seconds}
         </p>
 
         <p>
-          Country: {artist.country}
+          Release Year: {track.release_year}
         </p>
-
-        <p>
-          {artist.bio}
-        </p>
-
-        <h2>
-          Tracks
-        </h2>
-
-        {tracks.map((track) => (
-
-          <div
-            key={track.id}
-            className="y2k-card"
-            style={{
-              padding:'20px',
-              marginTop:'15px'
-            }}
-          >
-            🎵 {track.title}
-          </div>
-
-        ))}
 
       </div>
     </div>
   );
 }
 
-export default ArtistDetailsPage;
+export default TrackDetailsPage;
