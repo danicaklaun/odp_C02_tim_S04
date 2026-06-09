@@ -123,6 +123,47 @@ const deleteTrack = async (
 
   }
 };
+const editTrack = async (
+  track: any
+) => {
+
+  try {
+
+    const newTitle = prompt(
+      'New title:',
+      track.title
+    );
+
+    if (!newTitle) return;
+
+    const token =
+      localStorage.getItem('token');
+
+    await api.put(
+      `/tracks/${track.id}`,
+      {
+        title: newTitle,
+        artist_id: track.artist_id,
+        duration_sec: track.duration_sec,
+        album: track.album,
+        release_year: track.release_year
+      },
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+    );
+
+    getTracks();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
 
   return (
     <div
@@ -241,31 +282,13 @@ const deleteTrack = async (
 
 <div>
 
-            <button
-onClick={(e) => {
-  e.stopPropagation();
-  saveTrack(track.id);
-}}              style={{
-                background:'#f472d0',
-                border:'none',
-                color:'white',
-                padding:'10px 15px',
-                borderRadius:'10px',
-                cursor:'pointer'
-              }}
-            >
-              ❤️ Save
-            </button>
-{role === 'admin' && (
-
   <button
-   onClick={(e) => {
-  e.stopPropagation();
-  deleteTrack(track.id);
-}}
+    onClick={(e) => {
+      e.stopPropagation();
+      saveTrack(track.id);
+    }}
     style={{
-      marginLeft:'10px',
-      background:'#ff2d55',
+      background:'#f472d0',
       border:'none',
       color:'white',
       padding:'10px 15px',
@@ -273,10 +296,53 @@ onClick={(e) => {
       cursor:'pointer'
     }}
   >
-    🗑 Delete
+    ❤️ Save
   </button>
 
-)}
+  {role === 'admin' && (
+
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        editTrack(track);
+      }}
+      style={{
+        marginLeft:'10px',
+        background:'#3b82f6',
+        border:'none',
+        color:'white',
+        padding:'10px 15px',
+        borderRadius:'10px',
+        cursor:'pointer'
+      }}
+    >
+      ✏ Edit
+    </button>
+
+  )}
+
+  {role === 'admin' && (
+
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        deleteTrack(track.id);
+      }}
+      style={{
+        marginLeft:'10px',
+        background:'#ff2d55',
+        border:'none',
+        color:'white',
+        padding:'10px 15px',
+        borderRadius:'10px',
+        cursor:'pointer'
+      }}
+    >
+      🗑 Delete
+    </button>
+
+  )}
+
 </div>
           </div>
 
