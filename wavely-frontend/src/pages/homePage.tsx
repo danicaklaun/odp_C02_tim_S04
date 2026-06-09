@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import bg2 from '../assets/bg2.webp';
 
+
 function HomePage() {
 
   const navigate = useNavigate();
+  const role =
+  localStorage.getItem('role');
 
   return (
     <div
@@ -56,7 +59,20 @@ function HomePage() {
           gap:'30px'
         }}
       >
+{role === 'admin' && (
 
+  <div
+    className="y2k-card"
+    onClick={() => navigate('/admin')}
+    style={{
+      padding: '30px',
+      cursor: 'pointer'
+    }}
+  >
+    ⭐ Admin Dashboard
+  </div>
+
+)}
         <div
           className="y2k-card"
           onClick={() => navigate('/playlists')}
@@ -90,10 +106,32 @@ function HomePage() {
           🎤 Following Artists
         </div>
 
+<div
+  onClick={() => navigate('/tracks')}
+  style={{
+    background:'#1f2937',
+    padding:'30px',
+    borderRadius:'20px',
+    cursor:'pointer'
+  }}
+>
+  🎶 All Tracks
+</div>
+<div
+  className="y2k-card"
+  onClick={() => navigate('/artists')}
+  style={{
+    padding:'35px',
+    borderRadius:'25px'
+  }}
+>
+  🎤 Artists
+</div>
         <div
           onClick={() => {
-            localStorage.removeItem('token');
-            navigate('/');
+localStorage.removeItem('token');
+localStorage.removeItem('role');
+localStorage.removeItem('username');           navigate('/');
           }}
           style={{
             background:'#ff2d55',

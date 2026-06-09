@@ -8,7 +8,11 @@ import HomePage from './pages/homePage';
 import PlaylistsPage from './pages/playlistsPage';
 import LibraryPage from './pages/libraryPage';
 import FollowingPage from './pages/followingPage';
-import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
+import PlaylistDetailsPage from './pages/playlistDetailsPage';
+import TracksPage from './pages/tracksPage';
+import RegisterPage from './pages/registerPage';
+import ArtistsPage from './pages/artistPage';
+import AdminPage from './pages/adminPage';
 
 function App() {
   return (
@@ -38,6 +42,22 @@ function App() {
   path="/playlists/:id"
   element={<PlaylistDetailsPage />}
 />
+<Route
+  path="/tracks"
+  element={<TracksPage />}
+/>
+<Route
+  path="/register"
+  element={<RegisterPage />}
+/>
+<Route
+  path="/artists"
+  element={<ArtistsPage />}
+/>
+<Route
+  path="/admin"
+  element={<AdminPage />}
+ />
     </Routes>
   );
 }

@@ -7,6 +7,7 @@ import bg3 from '../assets/bg3.webp';
 function LibraryPage() {
 
   const [tracks, setTracks] = useState<any[]>([]);
+  const [playlists, setPlaylists] = useState<any[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,9 +38,95 @@ console.log('DATA', response.data);
       }
     };
 
-    getLibrary();
 
-  }, []);
+    getLibrary();
+    getPlaylists();
+
+  }, [])
+const getPlaylists = async () => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    const response = await api.get(
+      '/playlists',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setPlaylists(response.data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
+
+const addToPlaylist = async (
+  playlistId: number,
+  trackId: number
+) => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    await api.post(
+      `/playlists/${playlistId}/tracks`,
+      {
+        trackId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    alert('Added to playlist');
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert('Already exists');
+
+  }
+};
+
+const removeTrack = async (trackId: number) => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    await api.delete(
+      `/library/${trackId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setTracks(
+      tracks.filter(
+        (track) => track.id !== trackId
+      )
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
+
 
   return (
      <div
@@ -94,17 +181,64 @@ console.log('DATA', response.data);
 <p>Broj pesama: {tracks.length}</p>
       {tracks.map((track) => (
 
-        <div
-        className="y2k-card"
-          key={track.id}
-          style={{
-            padding: '20px',
-            borderRadius: '15px',
-            marginTop: '15px'
-          }}
-        >
-          {track.title}
-        </div>
+       <div
+  className="y2k-card"
+  key={track.id}
+  style={{
+    padding: '20px',
+    borderRadius: '15px',
+    marginTop: '15px'
+  }}
+>
+  <h3>{track.title}</h3>
+
+  <div
+    style={{
+      display: 'flex',
+      gap: '10px',
+      flexWrap: 'wrap',
+      marginTop: '10px'
+    }}
+  >
+    {playlists.map((playlist) => (
+
+      <button
+        key={playlist.id}
+        onClick={() =>
+          addToPlaylist(
+            playlist.id,
+            track.id
+          )
+        }
+        style={{
+          background: '#f472d0',
+          border: 'none',
+          color: 'white',
+          padding: '8px 15px',
+          borderRadius: '10px',
+          cursor: 'pointer'
+        }}
+      >
+        ➕ {playlist.name}
+      </button>
+
+    ))}
+
+    <button
+  onClick={() => removeTrack(track.id)}
+  style={{
+    background: '#dc2626',
+    border: 'none',
+    color: 'white',
+    padding: '8px 15px',
+    borderRadius: '10px',
+    cursor: 'pointer'
+  }}
+>
+  ❌ Remove
+</button>
+  </div>
+</div>
 
       ))}
     </div>

@@ -40,6 +40,36 @@ function PlaylistDetailsPage() {
 
   }, [id]);
 
+  const removeTrack = async (
+  trackId: number
+) => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    await api.delete(
+      `/playlists/${id}/tracks/${trackId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setTracks(
+      tracks.filter(
+        (track) => track.id !== trackId
+      )
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
+
   return (
     <div
       style={{
@@ -74,16 +104,37 @@ function PlaylistDetailsPage() {
       {tracks.map((track) => (
 
         <div
-          key={track.id}
-          className="y2k-card"
-          style={{
-            padding: '20px',
-            borderRadius: '15px',
-            marginTop: '15px'
-          }}
-        >
-          🎵 {track.title}
-        </div>
+  key={track.id}
+  className="y2k-card"
+  style={{
+    padding: '20px',
+    borderRadius: '15px',
+    marginTop: '15px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }}
+>
+  <span>
+    🎵 {track.title}
+  </span>
+
+  <button
+    onClick={() =>
+      removeTrack(track.id)
+    }
+    style={{
+      background: '#dc2626',
+      border: 'none',
+      color: 'white',
+      padding: '10px 15px',
+      borderRadius: '10px',
+      cursor: 'pointer'
+    }}
+  >
+    ❌ Remove
+  </button>
+</div>
 
       ))}
 

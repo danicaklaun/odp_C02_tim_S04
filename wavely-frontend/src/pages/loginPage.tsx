@@ -17,9 +17,19 @@ function LoginPage() {
       });
 
       localStorage.setItem(
-        'token',
-        response.data.token
-      );
+  'token',
+  response.data.token
+);
+
+localStorage.setItem(
+  'role',
+  response.data.role
+);
+
+localStorage.setItem(
+  'username',
+  response.data.username
+);
 
       navigate('/home');
 
@@ -147,6 +157,16 @@ function LoginPage() {
         >
           Login
         </button>
+        <p
+  style={{
+    marginTop: '20px',
+    cursor: 'pointer',
+    color: '#fbcfe8'
+  }}
+  onClick={() => navigate('/register')}
+>
+  Don't have an account? Register
+</p>
       </div>
     </div>
   );

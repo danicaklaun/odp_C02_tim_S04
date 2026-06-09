@@ -124,8 +124,10 @@ export const login = async (
     );
 
     res.json({
-      token
-    });
+  token,
+  role: user.role,
+  username: user.username
+});
 
   } catch {
     res.status(500).json({
