@@ -60,18 +60,42 @@ function HomePage() {
         }}
       >
 {role === 'admin' && (
+  <>
+    <div
+      className="y2k-card"
+      onClick={() => navigate('/admin')}
+      style={{
+        padding:'35px',
+        borderRadius:'25px',
+        cursor:'pointer'
+      }}
+    >
+      ⭐ Admin Dashboard
+    </div>
 
-  <div
-    className="y2k-card"
-    onClick={() => navigate('/admin')}
-    style={{
-      padding: '30px',
-      cursor: 'pointer'
-    }}
-  >
-    ⭐ Admin Dashboard
-  </div>
-
+    <div
+      className="y2k-card"
+      onClick={() => navigate('/audits')}
+      style={{
+        padding:'35px',
+        borderRadius:'25px',
+        cursor:'pointer'
+      }}
+    >
+      📋 Audit Logs
+    </div>
+    <div
+  className="y2k-card"
+  onClick={() => navigate('/users')}
+  style={{
+    padding:'35px',
+    borderRadius:'25px',
+    cursor:'pointer'
+  }}
+>
+  👥 Users
+</div>
+  </>
 )}
         <div
           className="y2k-card"

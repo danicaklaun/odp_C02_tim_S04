@@ -1,31 +1,27 @@
 import express from 'express';
+
 import {
-  getTracks,
-  createTrack,
-  deleteTrack
-} from '../controllers/trackController';
+  getAllUsers,
+  updateRole
+} from '../controllers/userController';
 
 import { authMiddleware } from '../middleware/authMiddleware';
 import { authorizeRole } from '../middleware/authorizeRole';
+
 const router = express.Router();
 
 router.get(
-  '/',
-  getTracks
-);
-
-router.post(
-  '/',
+  '/all',
   authMiddleware,
   authorizeRole('admin'),
-  createTrack
+  getAllUsers
 );
 
-router.delete(
-  '/:id',
+router.put(
+  '/:id/role',
   authMiddleware,
   authorizeRole('admin'),
-  deleteTrack
+  updateRole
 );
 
 export default router;

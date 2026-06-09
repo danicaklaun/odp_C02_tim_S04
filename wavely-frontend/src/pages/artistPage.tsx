@@ -88,15 +88,19 @@ function ArtistsPage() {
 
         {artists.map((artist) => (
 
-          <div
-            key={artist.id}
-            className="y2k-card"
-            style={{
-              padding:'20px',
-              borderRadius:'15px',
-              marginTop:'15px'
-            }}
-          >
+         <div
+  key={artist.id}
+  className="y2k-card"
+  onClick={() =>
+    navigate(`/artists/${artist.id}`)
+  }
+  style={{
+    cursor:'pointer',
+    padding:'20px',
+    borderRadius:'15px',
+    marginTop:'15px'
+  }}
+>
             <h3>{artist.name}</h3>
 
             {artist.genre && (

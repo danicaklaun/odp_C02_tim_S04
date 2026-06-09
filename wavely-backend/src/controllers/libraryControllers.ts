@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { pool } from '../db/db';
 import { AuthRequest } from '../middleware/authMiddleware';
+import { createAuditLog } from '../services/auditService';
 
 export const getLibrary = async (
   req: AuthRequest,
@@ -22,14 +23,15 @@ export const getLibrary = async (
 
     res.json(rows);
 
- } catch (error) {
+  } catch (error) {
 
-  console.log(error);
+    console.log(error);
 
-  res.status(500).json({
-    message: 'Server error'
-  });
-}
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
 };
 
 export const saveTrack = async (
@@ -42,10 +44,16 @@ export const saveTrack = async (
 
     await pool.execute(
       `
-      INSERT INTO user_tracks (user_id, track_id)
+      INSERT INTO user_tracks
+      (user_id, track_id)
       VALUES (?, ?)
       `,
       [req.user!.id, trackId]
+    );
+
+    await createAuditLog(
+      req.user!.id,
+      `Saved track ${trackId} to library`
     );
 
     res.json({
@@ -54,12 +62,13 @@ export const saveTrack = async (
 
   } catch (error) {
 
-  console.log(error);
+    console.log(error);
 
-  res.status(500).json({
-    message: 'Server error'
-  });
-}
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
 };
 
 export const removeTrack = async (
@@ -79,16 +88,22 @@ export const removeTrack = async (
       [req.user!.id, trackId]
     );
 
+    await createAuditLog(
+      req.user!.id,
+      `Removed track ${trackId} from library`
+    );
+
     res.json({
       message: 'Track removed'
     });
 
   } catch (error) {
 
-  console.log(error);
+    console.log(error);
 
-  res.status(500).json({
-    message: 'Server error'
-  });
-}
+    res.status(500).json({
+      message: 'Server error'
+    });
+
+  }
 };

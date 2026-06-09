@@ -13,6 +13,9 @@ import TracksPage from './pages/tracksPage';
 import RegisterPage from './pages/registerPage';
 import ArtistsPage from './pages/artistPage';
 import AdminPage from './pages/adminPage';
+import AuditLogsPage from './pages/auditLogsPage';
+import UsersPage from './pages/usersPage';
+import ArtistDetailsPage from './pages/artistDetailsPage';
 
 function App() {
   return (
@@ -58,6 +61,18 @@ function App() {
   path="/admin"
   element={<AdminPage />}
  />
+ <Route
+  path="/audits"
+  element={<AuditLogsPage />}
+/>
+<Route
+  path="/users"
+  element={<UsersPage />}
+/>
+<Route
+  path="/artists/:id"
+  element={<ArtistDetailsPage />}
+/>
     </Routes>
   );
 }

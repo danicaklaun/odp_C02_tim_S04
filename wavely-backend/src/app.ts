@@ -8,6 +8,8 @@ import followingRoutes from './routes/followingRoutes';
 import libraryRoutes from './routes/libraryRoutes';
 import playlistRoutes from './routes/playlistRoutes';
 import trackRoutes from './routes/trackRoutes';
+import auditRoutes from './routes/auditRoutes';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 
@@ -25,6 +27,14 @@ app.use('/api/playlists', playlistRoutes);
 app.use(
   '/api/tracks',
   trackRoutes
+);
+app.use(
+  '/api/audits',
+  auditRoutes
+);
+app.use(
+  '/api/users',
+  userRoutes
 );
 
 app.listen(3000, () => {

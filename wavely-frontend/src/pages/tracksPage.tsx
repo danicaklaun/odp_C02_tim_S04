@@ -7,54 +7,122 @@ function TracksPage() {
 
   const [tracks, setTracks] = useState<any[]>([]);
   const navigate = useNavigate();
+  const role = localStorage.getItem('role');
 
-  useEffect(() => {
-
-    const getTracks = async () => {
-
-      try {
-
-        const response = await api.get('/tracks');
-
-        setTracks(response.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-
-    getTracks();
-
-  }, []);
+const [title, setTitle] = useState('');
+const [artistId, setArtistId] = useState('');
+const [durationSec, setDurationSec] = useState('');
+const [album, setAlbum] = useState('');
+const [releaseYear, setReleaseYear] = useState('');
+ useEffect(() => {
+  getTracks();
+}, []);
 
   const saveTrack = async (trackId: number) => {
 
-    try {
+  try {
 
-      const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-      await api.post(
-        `/library/${trackId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+    await api.post(
+      `/library/${trackId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
+      }
+    );
 
-      alert('Song saved to library');
+    alert('Song saved to library');
 
-    } catch (error) {
+  } catch (error) {
 
-      console.log(error);
+    console.log(error);
 
-      alert('Already saved');
+    alert('Already saved');
 
-    }
-  };
+  }
+};
+  const getTracks = async () => {
+
+  try {
+
+    const response = await api.get('/tracks');
+
+    setTracks(response.data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
+
+const createTrack = async () => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    await api.post(
+      '/tracks',
+      {
+        title,
+        artist_id: Number(artistId),
+        duration_sec: Number(durationSec),
+        album,
+        release_year: Number(releaseYear)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setTitle('');
+    setArtistId('');
+    setDurationSec('');
+    setAlbum('');
+    setReleaseYear('');
+
+    getTracks();
+
+ } catch (error: any) {
+
+  console.log('ERROR:', error);
+  console.log('DATA:', error.response?.data);
+  console.log('STATUS:', error.response?.status);
+
+}
+};
+
+const deleteTrack = async (
+  id: number
+) => {
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    await api.delete(
+      `/tracks/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    getTracks();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
 
   return (
     <div
@@ -102,7 +170,56 @@ function TracksPage() {
         >
           🎶 All Tracks
         </h1>
+{role === 'admin' && (
 
+  <div
+    className="y2k-card"
+    style={{
+      padding:'20px',
+      marginBottom:'30px',
+      display:'flex',
+      gap:'10px',
+      flexWrap:'wrap'
+    }}
+  >
+<input
+  placeholder="Title"
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
+/>
+
+<input
+  placeholder="Artist ID"
+  value={artistId}
+  onChange={(e) => setArtistId(e.target.value)}
+/>
+    <input
+  placeholder="Duration (sec)"
+  value={durationSec}
+  onChange={(e) => setDurationSec(e.target.value)}
+/>
+
+<input
+  placeholder="Album"
+  value={album}
+  onChange={(e) => setAlbum(e.target.value)}
+/>
+
+<input
+  placeholder="Release Year"
+  value={releaseYear}
+  onChange={(e) => setReleaseYear(e.target.value)}
+/>
+
+    <button
+      onClick={createTrack}
+    >
+      ➕ Add Track
+    </button>
+
+  </div>
+
+)}
         {tracks.map((track) => (
 
           <div
@@ -118,6 +235,8 @@ function TracksPage() {
           >
             <span>{track.title}</span>
 
+<div>
+
             <button
               onClick={() => saveTrack(track.id)}
               style={{
@@ -131,7 +250,27 @@ function TracksPage() {
             >
               ❤️ Save
             </button>
+{role === 'admin' && (
 
+  <button
+    onClick={() =>
+      deleteTrack(track.id)
+    }
+    style={{
+      marginLeft:'10px',
+      background:'#ff2d55',
+      border:'none',
+      color:'white',
+      padding:'10px 15px',
+      borderRadius:'10px',
+      cursor:'pointer'
+    }}
+  >
+    🗑 Delete
+  </button>
+
+)}
+</div>
           </div>
 
         ))}

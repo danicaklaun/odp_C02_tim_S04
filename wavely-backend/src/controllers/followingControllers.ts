@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { pool } from '../db/db';
 import { AuthRequest } from '../middleware/authMiddleware';
+import { createAuditLog } from '../services/auditService';
 
 export const getFollowing = async (
   req: AuthRequest,
@@ -21,10 +22,14 @@ export const getFollowing = async (
 
     res.json(rows);
 
-  } catch {
+  } catch (error) {
+
+    console.log(error);
+
     res.status(500).json({
       message: 'Server error'
     });
+
   }
 };
 
@@ -34,23 +39,34 @@ export const followArtist = async (
 ) => {
   try {
 
-const artistId = Number(req.params.artistId);
+    const artistId = Number(req.params.artistId);
+
     await pool.execute(
       `
-      INSERT INTO user_artists (user_id, artist_id)
+      INSERT INTO user_artists
+      (user_id, artist_id)
       VALUES (?, ?)
       `,
       [req.user!.id, artistId]
+    );
+
+    await createAuditLog(
+      req.user!.id,
+      `Followed artist ${artistId}`
     );
 
     res.json({
       message: 'Artist followed'
     });
 
-  } catch {
+  } catch (error) {
+
+    console.log(error);
+
     res.status(500).json({
       message: 'Server error'
     });
+
   }
 };
 
@@ -60,7 +76,8 @@ export const unfollowArtist = async (
 ) => {
   try {
 
-const artistId = Number(req.params.artistId);
+    const artistId = Number(req.params.artistId);
+
     await pool.execute(
       `
       DELETE FROM user_artists
@@ -70,13 +87,22 @@ const artistId = Number(req.params.artistId);
       [req.user!.id, artistId]
     );
 
+    await createAuditLog(
+      req.user!.id,
+      `Unfollowed artist ${artistId}`
+    );
+
     res.json({
       message: 'Artist unfollowed'
     });
 
-  } catch {
+  } catch (error) {
+
+    console.log(error);
+
     res.status(500).json({
       message: 'Server error'
     });
+
   }
 };
