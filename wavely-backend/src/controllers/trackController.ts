@@ -2,6 +2,22 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import { createAuditLog } from '../services/auditService';
 import { pool } from '../db/db';
+import { RowDataPacket } from 'mysql2';
+
+interface TrackDetails extends RowDataPacket {
+  id: number;
+  title: string;
+  artist_id: number;
+  duration_sec: number;
+  album: string;
+  release_year: number;
+  artist_name: string;
+  genre: string;
+}
+
+interface TrackTitle extends RowDataPacket {
+  title: string;
+}
 
 export const getTracks = async (
   req: Request,
@@ -37,8 +53,8 @@ export const getTrackDetails = async (
 
     const trackId = Number(req.params.id);
 
-    const [rows]: any = await pool.execute(
-      `
+const [rows] =
+  await pool.execute<TrackDetails[]>(      `
       SELECT
         tracks.*,
         artists.name AS artist_name,
@@ -57,8 +73,7 @@ export const getTrackDetails = async (
       });
     }
 
-    res.json(rows[0]);
-
+res.json(rows[0] ?? null);
   } catch (error) {
 
     console.log(error);
@@ -83,6 +98,30 @@ export const createTrack = async (
       album,
       release_year
     } = req.body;
+
+    if (!title || title.trim().length === 0) {
+  return res.status(400).json({
+    message: 'Track title is required'
+  });
+}
+
+if (!duration_sec || duration_sec <= 0) {
+  return res.status(400).json({
+    message: 'Duration must be greater than 0'
+  });
+}
+
+const currentYear = new Date().getFullYear();
+
+if (
+  !release_year ||
+  release_year < 1900 ||
+  release_year > currentYear
+) {
+  return res.status(400).json({
+    message: 'Invalid release year'
+  });
+}
 
     await pool.execute(
       `
@@ -133,8 +172,8 @@ export const deleteTrack = async (
 
     const trackId = Number(req.params.id);
 
-    const [rows]: any = await pool.execute(
-      `
+const [rows] =
+  await pool.execute<TrackTitle[]>(      `
       SELECT title
       FROM tracks
       WHERE id = ?

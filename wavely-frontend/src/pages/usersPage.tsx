@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  saved_tracks: number;
+}
+
 function UsersPage() {
 
-  const [users, setUsers] = useState<any[]>([]);
-  const navigate = useNavigate();
+const [users, setUsers] =
+  useState<User[]>([]);  const navigate = useNavigate();
 
   const getUsers = async () => {
 

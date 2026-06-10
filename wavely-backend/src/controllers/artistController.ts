@@ -2,6 +2,29 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import { createAuditLog } from '../services/auditService';
 import { pool } from '../db/db';
+import { RowDataPacket } from 'mysql2';
+
+interface Artist extends RowDataPacket {
+  id: number;
+  name: string;
+  genre: string;
+  country: string;
+  bio: string;
+}
+
+interface Track extends RowDataPacket {
+  id: number;
+  title: string;
+  artist_id: number;
+}
+
+interface ArtistName extends RowDataPacket {
+  name: string;
+}
+
+interface FollowerCount extends RowDataPacket {
+  followers: number;
+}
 
 export const getAllArtists = async (
   req: Request,
@@ -38,6 +61,12 @@ export const createArtist = async (
       country,
       bio
     } = req.body;
+
+    if (!name || name.trim().length < 2) {
+  return res.status(400).json({
+    message: 'Artist name is invalid'
+  });
+}
 
     await pool.execute(
       `
@@ -130,8 +159,8 @@ export const deleteArtist = async (
 
     const artistId = Number(req.params.id);
 
-    const [rows]: any = await pool.execute(
-      `
+const [rows] =
+  await pool.execute<ArtistName[]>(      `
       SELECT name
       FROM artists
       WHERE id = ?
@@ -177,8 +206,8 @@ export const getArtistDetails = async (
 
     const artistId = Number(req.params.id);
 
-    const [artistRows]: any = await pool.execute(
-      `
+const [artistRows] =
+  await pool.execute<Artist[]>(      `
       SELECT *
       FROM artists
       WHERE id = ?
@@ -192,8 +221,8 @@ export const getArtistDetails = async (
       });
     }
 
-    const [trackRows]: any = await pool.execute(
-      `
+const [trackRows] =
+  await pool.execute<Track[]>(      `
       SELECT *
       FROM tracks
       WHERE artist_id = ?
@@ -201,8 +230,8 @@ export const getArtistDetails = async (
       [artistId]
     );
 
-    const [followerRows]: any = await pool.execute(
-  `
+const [followerRows] =
+  await pool.execute<FollowerCount[]>(  `
   SELECT COUNT(*) AS followers
   FROM user_artists
   WHERE artist_id = ?
@@ -213,8 +242,7 @@ export const getArtistDetails = async (
 res.json({
   artist: artistRows[0],
   tracks: trackRows,
-  followers: followerRows[0].followers
-});
+followers: followerRows[0]?.followers ?? 0});
 
   } catch (error) {
 

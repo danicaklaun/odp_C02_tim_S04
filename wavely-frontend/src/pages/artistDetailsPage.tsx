@@ -3,6 +3,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 import bg3 from '../assets/bg3.webp';
 
+interface Artist {
+  id: number;
+  name: string;
+  genre: string;
+  country: string;
+  bio: string;
+}
+
+interface Track {
+  id: number;
+  title: string;
+  artist_id: number;
+  duration_sec: number;
+  album: string;
+  release_year: number;
+}
+
 function ArtistDetailsPage() {
 
   const { id } = useParams();
@@ -10,8 +27,11 @@ function ArtistDetailsPage() {
   const navigate = useNavigate();
   const [followers, setFollowers] = useState(0);
 
-  const [artist, setArtist] = useState<any>(null);
-  const [tracks, setTracks] = useState<any[]>([]);
+ const [artist, setArtist] =
+  useState<Artist | null>(null);
+
+const [tracks, setTracks] =
+  useState<Track[]>([]);
 
   useEffect(() => {
 
@@ -81,23 +101,12 @@ setFollowers(response.data.followers);
         >
           🎤 {artist.name}
         </h1>
-        <h1
-  style={{
-    fontFamily:'AudioNugget',
-    fontSize:'90px',
-    color:'#f472d0'
-  }}
->
-  🎤 {artist.name}
-</h1>
+        
 
 <p>
   👥 Followers: {followers}
 </p>
 
-<p>
-  Genre: {artist.genre}
-</p>
 
         <p>
           Genre: {artist.genre}

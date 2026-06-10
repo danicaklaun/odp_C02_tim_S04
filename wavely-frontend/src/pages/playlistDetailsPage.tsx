@@ -2,14 +2,23 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 
+interface Track {
+  id: number;
+  title: string;
+  artist_id: number;
+  duration_sec: number;
+  album: string;
+  release_year: number;
+}
+
 function PlaylistDetailsPage() {
 
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const [tracks, setTracks] = useState<any[]>([]);
-
+const [tracks, setTracks] =
+  useState<Track[]>([]);
   useEffect(() => {
 
     const getPlaylistDetails = async () => {

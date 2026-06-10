@@ -3,11 +3,27 @@ import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import bg3 from '../assets/bg3.webp';
 
+interface Track {
+  id: number;
+  title: string;
+  artist_id: number;
+  duration_sec: number;
+  album: string;
+  release_year: number;
+}
+
+interface Playlist {
+  id: number;
+  name: string;
+}
 
 function LibraryPage() {
 
-  const [tracks, setTracks] = useState<any[]>([]);
-  const [playlists, setPlaylists] = useState<any[]>([]);
+  const [tracks, setTracks] =
+  useState<Track[]>([]);
+
+const [playlists, setPlaylists] =
+  useState<Playlist[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {

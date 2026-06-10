@@ -2,10 +2,17 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
+interface AuditLog {
+  id: number;
+  user_id: number;
+  action: string;
+  created_at: string;
+}
+
 function AuditLogsPage() {
 
-  const [logs, setLogs] = useState<any[]>([]);
-  const navigate = useNavigate();
+const [logs, setLogs] =
+  useState<AuditLog[]>([]);  const navigate = useNavigate();
 
   useEffect(() => {
 

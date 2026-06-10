@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import bg3 from '../assets/bg3.webp';
+interface Artist {
+  id: number;
+  name: string;
+  genre: string;
+  country: string;
+  bio: string;
+}
 
 function ArtistsPage() {
 
-  const [artists, setArtists] = useState<any[]>([]);
 
+
+const [artists, setArtists] = useState<Artist[]>([]);
   const navigate = useNavigate();
 
   const role = localStorage.getItem('role');
@@ -33,8 +41,8 @@ function ArtistsPage() {
   }, []);
 
   const editArtist = async (
-    artist: any
-  ) => {
+  artist: Artist
+) => {
 
     try {
 

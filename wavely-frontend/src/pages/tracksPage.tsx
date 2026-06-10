@@ -3,10 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import bg3 from '../assets/bg3.webp';
 
+interface Track {
+  id: number;
+  title: string;
+  artist_id: number;
+  duration_sec: number;
+  album: string;
+  release_year: number;
+}
+
 function TracksPage() {
 
-  const [tracks, setTracks] = useState<any[]>([]);
-  const navigate = useNavigate();
+const [tracks, setTracks] =
+  useState<Track[]>([]);  const navigate = useNavigate();
   const role = localStorage.getItem('role');
 const token = localStorage.getItem('token');
 const [title, setTitle] = useState('');
@@ -90,11 +99,9 @@ const createTrack = async () => {
 
     getTracks();
 
- } catch (error: any) {
+ } catch {
 
-  console.log('ERROR:', error);
-  console.log('DATA:', error.response?.data);
-  console.log('STATUS:', error.response?.status);
+  console.log('Error creating track');
 
 }
 };
@@ -125,7 +132,7 @@ const deleteTrack = async (
   }
 };
 const editTrack = async (
-  track: any
+  track: Track
 ) => {
 
   try {

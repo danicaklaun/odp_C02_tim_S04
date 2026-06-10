@@ -3,13 +3,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 import bg3 from '../assets/bg3.webp';
 
+interface TrackDetails {
+  id: number;
+  title: string;
+  artist_name: string;
+  genre: string;
+  album: string;
+  duration_sec: number;
+  release_year: number;
+}
+
 function TrackDetailsPage() {
 
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const [track, setTrack] = useState<any>(null);
-
+const [track, setTrack] =
+  useState<TrackDetails | null>(null);
   useEffect(() => {
 
     const getTrack = async () => {

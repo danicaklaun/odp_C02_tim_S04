@@ -2,6 +2,21 @@ import { Response } from 'express';
 import { pool } from '../db/db';
 import { AuthRequest } from '../middleware/authMiddleware';
 import { createAuditLog } from '../services/auditService';
+import { RowDataPacket } from 'mysql2';
+
+interface UserTrack extends RowDataPacket {
+  user_id: number;
+  track_id: number;
+}
+
+interface PlaylistTrack extends RowDataPacket {
+  playlist_id: number;
+  track_id: number;
+}
+
+interface CountRow extends RowDataPacket {
+  total: number;
+}
 
 export const getPlaylists = async (
   req: AuthRequest,
@@ -38,11 +53,11 @@ export const createPlaylist = async (
 
     const { name, description } = req.body;
 
-    if (!name) {
-      return res.status(400).json({
-        message: 'Playlist name required'
-      });
-    }
+    if (!name || name.trim().length < 2) {
+  return res.status(400).json({
+    message: 'Playlist name required'
+  });
+}
 
     await pool.execute(
       `
@@ -121,8 +136,8 @@ export const addTrackToPlaylist = async (
     const playlistId = Number(req.params.id);
     const { trackId } = req.body;
 
-    const [libraryRows]: any = await pool.execute(
-      `
+const [libraryRows] =
+  await pool.execute<UserTrack[]>(      `
       SELECT *
       FROM user_tracks
       WHERE user_id = ?
@@ -137,8 +152,8 @@ export const addTrackToPlaylist = async (
       });
     }
 
-    const [existingRows]: any = await pool.execute(
-      `
+const [existingRows] =
+  await pool.execute<PlaylistTrack[]>(      `
       SELECT *
       FROM playlist_tracks
       WHERE playlist_id = ?
@@ -153,8 +168,8 @@ export const addTrackToPlaylist = async (
       });
     }
 
-    const [countRows]: any = await pool.execute(
-      `
+const [countRows] =
+  await pool.execute<CountRow[]>(      `
       SELECT COUNT(*) as total
       FROM playlist_tracks
       WHERE playlist_id = ?
@@ -162,8 +177,8 @@ export const addTrackToPlaylist = async (
       [playlistId]
     );
 
-    const position = countRows[0].total + 1;
-
+const position =
+  (countRows[0]?.total ?? 0) + 1;
     await pool.execute(
       `
       INSERT INTO playlist_tracks

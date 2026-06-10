@@ -3,11 +3,15 @@ import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import bg3 from '../assets/bg3.webp';
 
+interface Playlist {
+  id: number;
+  name: string;
+}
 
 function PlaylistsPage() {
 
-  const [playlists, setPlaylists] = useState<any[]>([]);
-  const [playlistName, setPlaylistName] = useState('');
+const [playlists, setPlaylists] =
+  useState<Playlist[]>([]);  const [playlistName, setPlaylistName] = useState('');
   const navigate = useNavigate();
 const token = localStorage.getItem('token');
 

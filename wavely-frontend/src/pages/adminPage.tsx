@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+interface DashboardStats {
+  users: number;
+  artists: number;
+  tracks: number;
+  playlists: number;
+}
 
 function AdminPage() {
 
   const navigate = useNavigate();
 
-  const [stats, setStats] = useState<any>(null);
-
+const [stats, setStats] =
+  useState<DashboardStats | null>(
+    null
+  );
   useEffect(() => {
 
     const getStats = async () => {
