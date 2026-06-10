@@ -9,6 +9,7 @@ function PlaylistsPage() {
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [playlistName, setPlaylistName] = useState('');
   const navigate = useNavigate();
+const token = localStorage.getItem('token');
 
   const getPlaylists = async () => {
   try {
@@ -109,18 +110,19 @@ useEffect(() => {
         padding: '40px'
       }}
     >
-      <button
-  onClick={() => navigate('/home')}
-  style={{
-    padding: '10px',
-    marginBottom: '20px',
-    borderRadius: '10px',
-    border: 'none',
-    cursor: 'pointer'
-  }}
->
-  🏠 Home
-</button>
+      {token && (
+  <button
+    onClick={() => navigate('/home')}
+    style={{
+      padding:'10px',
+      borderRadius:'10px',
+      border:'none',
+      cursor:'pointer'
+    }}
+  >
+    🏠 Home
+  </button>
+)}
     <h1
   style={{
     fontFamily: 'AudioNugget',

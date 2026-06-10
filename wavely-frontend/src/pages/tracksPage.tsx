@@ -8,12 +8,13 @@ function TracksPage() {
   const [tracks, setTracks] = useState<any[]>([]);
   const navigate = useNavigate();
   const role = localStorage.getItem('role');
-
+const token = localStorage.getItem('token');
 const [title, setTitle] = useState('');
 const [artistId, setArtistId] = useState('');
 const [durationSec, setDurationSec] = useState('');
 const [album, setAlbum] = useState('');
 const [releaseYear, setReleaseYear] = useState('');
+const [search, setSearch] = useState('');
  useEffect(() => {
   getTracks();
 }, []);
@@ -190,18 +191,19 @@ const editTrack = async (
         }}
       >
 
-        <button
-          onClick={() => navigate('/home')}
-          style={{
-            padding:'10px',
-            borderRadius:'10px',
-            border:'none',
-            cursor:'pointer'
-          }}
-        >
-          🏠 Home
-        </button>
-
+       {token && (
+  <button
+    onClick={() => navigate('/home')}
+    style={{
+      padding:'10px',
+      borderRadius:'10px',
+      border:'none',
+      cursor:'pointer'
+    }}
+  >
+    🏠 Home
+  </button>
+)}
         <h1
           style={{
             fontFamily:'AudioNugget',
@@ -261,8 +263,24 @@ const editTrack = async (
   </div>
 
 )}
-        {tracks.map((track) => (
-
+<input
+  placeholder="Search tracks..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  style={{
+    padding:'12px',
+    marginBottom:'20px',
+    width:'300px',
+    borderRadius:'10px'
+  }}
+/>
+       {tracks
+  .filter((track) =>
+    track.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  )
+  .map((track) => (
          <div
   key={track.id}
   className="y2k-card"

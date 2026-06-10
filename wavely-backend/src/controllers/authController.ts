@@ -35,6 +35,30 @@ export const register = async (
       });
     }
 
+if (
+  !/^[a-zA-Z0-9-]{3,40}$/.test(username)
+) {
+  return res.status(400).json({
+    message: 'Korisničko ime nije validno'
+  });
+}
+
+if (
+  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+) {
+  return res.status(400).json({
+    message: 'Email nije validan'
+  });
+}
+
+if (
+  !/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)
+) {
+  return res.status(400).json({
+    message: 'Lozinka ne ispunjava uslove'
+  });
+}
+
     // HASH LOZINKE
     const hashedPassword = await bcrypt.hash(
       password,

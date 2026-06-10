@@ -3,7 +3,8 @@ import {
   getTracks,
   getTrackDetails,
   createTrack,
-  deleteTrack
+  deleteTrack,
+    updateTrack
 } from '../controllers/trackController';
 
 import { authMiddleware } from '../middleware/authMiddleware';
@@ -32,6 +33,12 @@ router.delete(
 router.get(
   '/:id',
   getTrackDetails
+);
+router.put(
+  '/:id',
+  authMiddleware,
+  authorizeRole('admin'),
+  updateTrack
 );
 
 export default router;

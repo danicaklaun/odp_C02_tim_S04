@@ -1,8 +1,49 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function AdminPage() {
 
   const navigate = useNavigate();
+
+  const [stats, setStats] = useState<any>(null);
+
+  useEffect(() => {
+
+    const getStats = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem('token');
+
+        const response =
+          await api.get(
+            '/admin/stats',
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+        setStats(response.data);
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
+    getStats();
+
+  }, []);
+
+  if (!stats) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div
@@ -28,21 +69,70 @@ function AdminPage() {
         ⭐ Admin Dashboard
       </h1>
 
-      <div className="y2k-card">
-        👥 Users
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px'
+        }}
+      >
+        👥 Users: {stats.users}
       </div>
 
-      <div className="y2k-card">
-        🎤 Artists
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px'
+        }}
+      >
+        🎤 Artists: {stats.artists}
       </div>
 
-      <div className="y2k-card">
-        🎵 Tracks
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px'
+        }}
+      >
+        🎵 Tracks: {stats.tracks}
       </div>
 
-      <div className="y2k-card">
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px'
+        }}
+      >
+        📁 Playlists: {stats.playlists}
+      </div>
+
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px',
+          cursor:'pointer'
+        }}
+        onClick={() => navigate('/users')}
+      >
+        👥 Manage Users
+      </div>
+
+      <div
+        className="y2k-card"
+        style={{
+          padding:'20px',
+          marginTop:'20px',
+          cursor:'pointer'
+        }}
+        onClick={() => navigate('/audits')}
+      >
         📋 Audit Logs
       </div>
+
     </div>
   );
 }

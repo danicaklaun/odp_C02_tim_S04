@@ -8,7 +8,6 @@ function TrackDetailsPage() {
   const { id } = useParams();
 
   const navigate = useNavigate();
-
   const [track, setTrack] = useState<any>(null);
 
   useEffect(() => {

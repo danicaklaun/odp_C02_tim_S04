@@ -10,6 +10,7 @@ function ArtistsPage() {
   const navigate = useNavigate();
 
   const role = localStorage.getItem('role');
+  const [search, setSearch] = useState('');
 
   const getArtists = async () => {
 
@@ -127,8 +128,24 @@ function ArtistsPage() {
         <p>
           Number of artists: {artists.length}
         </p>
-
-        {artists.map((artist) => (
+<input
+  placeholder="Search artists..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  style={{
+    padding:'12px',
+    marginBottom:'20px',
+    width:'300px',
+    borderRadius:'10px'
+  }}
+/>
+        {artists
+  .filter((artist) =>
+    artist.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  )
+  .map((artist) => (
 
           <div
             key={artist.id}

@@ -10,6 +10,7 @@ import playlistRoutes from './routes/playlistRoutes';
 import trackRoutes from './routes/trackRoutes';
 import auditRoutes from './routes/auditRoutes';
 import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use(
   '/api/users',
   userRoutes
 );
+app.use('/api/admin', adminRoutes);
 
 app.listen(3000, () => {
   console.log('Server running on port 3000');
