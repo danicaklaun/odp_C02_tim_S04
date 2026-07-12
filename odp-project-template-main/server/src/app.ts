@@ -2,6 +2,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 
+import { HiveTypeRepository } from "./Database/repositories/hiveTypes/HiveTypeRepository";
+import { HiveTypeService } from "./Services/hiveTypes/HiveTypeService";
+import { HiveTypeController } from "./WebAPI/controllers/HiveTypeController";
+
 import { ConsoleLoggerService } from "./Services/logger/ConsoleLoggerService";
 import { DbManager } from "./Database/connection/DbConnectionPool";
 
@@ -22,11 +26,13 @@ export const db     = new DbManager(logger);
 // Repositories
 const userRepo   = new UserRepository(db, logger);
 const entityRepo = new EntityRepository(db, logger);
+const hiveTypeRepo = new HiveTypeRepository(db, logger);
 
 // Services
 const authService   = new AuthService(userRepo);
 const userService   = new UserService(userRepo);
 const entityService = new EntityService(entityRepo);
+const hiveTypeService = new HiveTypeService(hiveTypeRepo);
 
 // Express
 const app = express();
@@ -36,5 +42,10 @@ app.use(express.json());
 app.use("/api/v1", new AuthController(authService).getRouter());
 app.use("/api/v1", new UserController(userService).getRouter());
 app.use("/api/v1", new EntityController(entityService).getRouter());
+app.use(
+  "/api/v1",
+  new HiveTypeController(hiveTypeService).getRouter()
+);
 
+console.log("APP STARTED");
 export default app;

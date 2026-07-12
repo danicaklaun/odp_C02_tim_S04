@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "sourceMap": true,
-    "target": "esnext",
+    "target": "ES2022",
     "module": "commonjs",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
     "strict": true,
+    "noImplicitAny": true,
     "skipLibCheck": true
   },
   "include": [
-    "./*.js",
     "src/**/*.ts",
-    "test/**/*.ts",
-  ],
+    "test/**/*.ts"
+  ]
 }
